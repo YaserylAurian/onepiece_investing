@@ -1,8 +1,9 @@
 """Unit tests of the sign up form"""
 from django.test import TestCase
+from django import forms
+from django.contrib.auth.hashers import check_password
 from stocks.forms import SignUpForm
 from stocks.models import User
-from django import forms
 
 class SignUpFormTestCase(TestCase):
 
@@ -41,3 +42,12 @@ class SignUpFormTestCase(TestCase):
         self.form_input['password_confirmation'] = "WrongPassword123"
         form = SignUpForm(data=self.form_input)
         self.assertFalse(form.is_valid())
+
+    def test_form_must_save_correctly(self):
+        form = SignUpForm(data=self.form_input)
+        before_count = User.objects.count()
+        form.save()
+        after_count = User.objects.count()
+        self.assertEqual(after_count, before_count+1)
+        user = User.objects.get(username='johndoe')
+        self.assertTrue(check_password('Password123', user.password))
