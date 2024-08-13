@@ -13,3 +13,6 @@ def sign_up(request):
     else:
         form = SignUpForm()
     return render(request, 'sign_up.html', {'form': form})
+
+def log_in(request):
+    return render(request, 'log_in.html')
