@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import SignUpForm
+from .forms import SignUpForm, LogInForm
 # Create your views here.
 def home(request):
     return render(request, 'home.html')
@@ -15,4 +15,5 @@ def sign_up(request):
     return render(request, 'sign_up.html', {'form': form})
 
 def log_in(request):
-    return render(request, 'log_in.html')
+    form = LogInForm()
+    return render(request, 'log_in.html', {'form': form})
