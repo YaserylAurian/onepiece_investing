@@ -4,8 +4,9 @@ from django.urls import reverse
 from stocks.forms import SignUpForm
 from stocks.models import User
 from django.contrib.auth.hashers import check_password
+from stocks.tests.helpers import LogInTester
 
-class SignUpViewTestCase(TestCase):
+class SignUpViewTestCase(TestCase, LogInTester):
 
     def setUp(self):
         self.url = reverse('sign_up')
@@ -39,6 +40,7 @@ class SignUpViewTestCase(TestCase):
         form = response.context['form']
         self.assertTrue(isinstance(form, SignUpForm))
         self.assertTrue(form.is_bound)
+        self.assertFalse(self._is_logged_in())
 
     def test_succesful_sign_up(self):
         before_count = User.objects.count()
@@ -49,3 +51,4 @@ class SignUpViewTestCase(TestCase):
         self.assertTemplateUsed(response, 'home.html')
         user = User.objects.get(username='johndoe')
         self.assertTrue(check_password('Password123', user.password))
+        self.assertTrue(self._is_logged_in())

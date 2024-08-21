@@ -2,8 +2,9 @@ from django.test import TestCase
 from django.urls import reverse
 from stocks.forms import LogInForm
 from stocks.models import User
+from stocks.tests.helpers import LogInTester
 
-class LogInViewTestCase(TestCase):
+class LogInViewTestCase(TestCase, LogInTester):
 
     def setUp(self):
         self.url = reverse('log_in')
@@ -14,10 +15,7 @@ class LogInViewTestCase(TestCase):
         User.objects.create_user(
             username='johndoe', 
             password='Password123'
-            )
-    
-    def _is_logged_in(self):
-        return '_auth_user_id' in self.client.session.keys()
+            )    
 
     def test_sign_up_url(self):
         self.assertEqual(self.url, '/log_in/')
